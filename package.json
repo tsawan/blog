@@ -1,7 +1,7 @@
 {
   "name": "TahirAwan.com",
   "private": true,
-  "engines": {"node": "12.x"},
+  "engines": {"node": "10.x"},
   "description": "Tahir Awan",
   "version": "1.0.0",
   "author": "Tahir Awan <tahir@tahirawan.com>",

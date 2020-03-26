@@ -6,7 +6,8 @@ module.exports = {
     siteUrl: "https://tahirawan.com",
     social: {
       twitter: "@tsawan"
-    }
+    },
+    offline: true
   },
   pathPrefix: "/",
   plugins: [

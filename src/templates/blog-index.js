@@ -14,8 +14,10 @@ class BlogIndexTemplate extends React.Component {
   render() {
     const siteTitle = get(this, "props.data.site.siteMetadata.title");
     const langKey = this.props.pageContext.langKey;
+    const offline = get(this, "props.data.site.siteMetadata.offline");
 
     const posts = get(this, "props.data.allMarkdownRemark.edges");
+    console.log("==> ", siteTitle, offline);
 
     return (
       <Layout location={this.props.location} title={siteTitle}>
@@ -38,37 +40,43 @@ class BlogIndexTemplate extends React.Component {
             </Panel>
           )}
 
-          {posts.map(({ node }) => {
-            const title = get(node, "frontmatter.title") || node.fields.slug;
-            return (
-              <article key={node.fields.slug}>
-                <header>
-                  <h3
-                    style={{
-                      fontFamily: "Montserrat, sans-serif",
-                      fontSize: rhythm(1),
-                      marginBottom: rhythm(1 / 4)
-                    }}
-                  >
-                    <Link
-                      style={{ boxShadow: "none" }}
-                      to={node.fields.slug}
-                      rel="bookmark"
+          {!offline ? (
+            posts.map(({ node }) => {
+              const title = get(node, "frontmatter.title") || node.fields.slug;
+              return (
+                <article key={node.fields.slug}>
+                  <header>
+                    <h3
+                      style={{
+                        fontFamily: "Montserrat, sans-serif",
+                        fontSize: rhythm(1),
+                        marginBottom: rhythm(1 / 4)
+                      }}
                     >
-                      {title}
-                    </Link>
-                  </h3>
-                  <small>
-                    {formatPostDate(node.frontmatter.date, langKey)}
-                    {` • ${formatReadingTime(node.timeToRead)}`}
-                  </small>
-                </header>
-                <p
-                  dangerouslySetInnerHTML={{ __html: node.frontmatter.spoiler }}
-                />
-              </article>
-            );
-          })}
+                      <Link
+                        style={{ boxShadow: "none" }}
+                        to={node.fields.slug}
+                        rel="bookmark"
+                      >
+                        {title}
+                      </Link>
+                    </h3>
+                    <small>
+                      {formatPostDate(node.frontmatter.date, langKey)}
+                      {` • ${formatReadingTime(node.timeToRead)}`}
+                    </small>
+                  </header>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: node.frontmatter.spoiler
+                    }}
+                  />
+                </article>
+              );
+            })
+          ) : (
+            <h3>Coming soon!!!</h3>
+          )}
         </main>
         <Footer />
       </Layout>
@@ -84,6 +92,7 @@ export const pageQuery = graphql`
       siteMetadata {
         title
         description
+        offline
       }
     }
     allMarkdownRemark(

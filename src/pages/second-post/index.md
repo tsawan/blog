@@ -6,6 +6,7 @@ cta: "dummy"
 ---
 
 I have been reading many blogs about xstate by @davidkpiano but wanted to try it out for a while. Recently I got involved in a proof of concept rewrite of a small application and while going through a CRUD form, found this code to enable/disable toolbar buttons.
+yes
 
 ```jsx
 // visual basic code
@@ -25,7 +26,7 @@ As we are using react for the rewrite, I found this as a perfect opportunity to 
 So I started reading some of the blogs again and watched the excellent talk by @davidkpiano and it all looked quite simple. But when I started to design the state machine using the xstate visualizer, it was not quite simple in the beginning. I had to actually sit down and draw the state machine on paper a couple of times to understand how it should actually work.
 
 ```jsx
-export const toolbarMachine0 = Machine({
+export const toolbarMachine = Machine({
   id: "toolbar",
   initial: "idle",
   states: {

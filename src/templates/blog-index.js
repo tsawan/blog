@@ -30,7 +30,7 @@ class BlogIndexTemplate extends React.Component {
             <Panel>
               These articles have been{" "}
               <a
-                href="https://github.com/gaearon/overreacted.io#contributing-translations"
+                href="https://github.com/tsawan/blog#contributing-translations"
                 target="_blank"
                 rel="noopener noreferrer"
               >

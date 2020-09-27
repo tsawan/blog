@@ -7,7 +7,7 @@ module.exports = {
     social: {
       twitter: "@tsawan"
     },
-    offline: true
+    offline: false
   },
   pathPrefix: "/",
   plugins: [

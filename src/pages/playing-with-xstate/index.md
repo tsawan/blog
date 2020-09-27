@@ -5,7 +5,7 @@ spoiler: Playing with XState
 cta: "none"
 ---
 
-I have been reading about XState by @davidkpiano and wanted to try how it could simplify the frontend code. Recently I got involved in a proof of concept rewrite of a small accounting application and while going through a CRUD form, found this code to enable/disable toolbar buttons.
+I have been reading about XState by @davidkpiano and wanted to try how it could simplify the frontend code. Recently I got involved in a proof of concept rewrite of a small accounting application and while going through a CRUD form, I found this code to enable/disable toolbar buttons.
 
 ```jsx
 // visual basic code
@@ -20,7 +20,7 @@ End Sub
 
 This function is used to enable/disable all buttons. This code implies two states and either Add/Edit/Delete are enabled or Save/Cancel. As we are using react for the rewrite, I found this as a perfect opportunity to try XState.
 
-So I started reading some of the blogs again and watched the excellent youtube video by @davidkpiano and it all looked quite simple. But when I started to design the state machine using the xstate visualizer, it was not quite simple in the beginning. I had to sit down and draw the state machine on paper a couple of times to understand how it should work.
+So I started reading some of the blogs and watched the excellent youtube video by @davidkpiano and it all looked quite simple. But when I started to design the state machine using the xstate visualizer, it was not quite simple in the beginning. I had to sit down and draw the state machine on paper a couple of times to understand how it should work.
 
 First of all, we need to add the required modules.
 
@@ -225,11 +225,11 @@ Please note that the useMachine hook creates a new machine on each invocation so
 - States are well defined and encapsulated inside machine definition. The state machine also captures the state transitions.
 - Testing the state machine is easy. Please see model-based testing in the Resources section.
 - Using a state management library not only results in reduced bugs but also promotes better developer experience and ease of maintenance.
-- You can use the XState visualizer to visualize as well as test the state transitions. The visualizer has a <code>state</code> tab to check the current state and a <code>event</code> tab to send events. It lists the possible events based on the current state and lists all the past events for easier playback.
+- You can use the XState visualizer to visualize as well as test the state transitions. The visualizer has a <code>state</code> tab to check the current state and an <code>event</code> tab to send events to transition the machine to another state. It lists the possible events based on the current state and lists all the past events for easier playback.
 
 ##Where to go from here##
 
-I've covered a very simple example in this post as a starting point. XState has a lot more features that I will cover in a future post.
+I've covered a very simple example in this post as a starting point. XState has a lot of features that I intend to cover in a future post.
 
 ##Resources##
 

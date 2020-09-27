@@ -5,7 +5,7 @@ spoiler: Playing with XState
 cta: "none"
 ---
 
-I have been reading about xstate by @davidkpiano and wanted to try how it could simplify the frontend code. Recently I got involved in a proof of concept rewrite of a small accounting application and while going through a CRUD form, found this code to enable/disable toolbar buttons.
+I have been reading about XState by @davidkpiano and wanted to try how it could simplify the frontend code. Recently I got involved in a proof of concept rewrite of a small accounting application and while going through a CRUD form, found this code to enable/disable toolbar buttons.
 
 ```jsx
 // visual basic code
@@ -20,9 +20,9 @@ End Sub
 
 This function is used to enable/disable all buttons. This code implies two states and either Add/Edit/Delete are enabled or Save/Cancel. As we are using react for the rewrite, I found this as a perfect opportunity to try XState.
 
-So I started reading some of the blogs again and watched the excellent youtube video by @davidkpiano and it all looked quite simple. But when I started to design the state machine using the xstate visualizer, it was not quite simple in the beginning. I had to actually sit down and draw the state machine on paper a couple of times to understand how it should actually work.
+So I started reading some of the blogs again and watched the excellent youtube video by @davidkpiano and it all looked quite simple. But when I started to design the state machine using the xstate visualizer, it was not quite simple in the beginning. I had to sit down and draw the state machine on paper a couple of times to understand how it should work.
 
-First of all we need to add the required modules.
+First of all, we need to add the required modules.
 
 ```
 yarn add xstate, @xstate/react
@@ -77,7 +77,7 @@ export const toolbarMachine = Machine({
 Trying this machine in the visualizer looks like below.
 ![Vis-1](images/state-vis-1.png "State Vis")
 
-As you can see, there are a total for five states and for each state we have defined the actions (corresponding to toolbar buttons) and transitions to next state. This is simple and it works. We ca use useMachine hook to use this machine in a functional component.
+As you can see, there is a total of five states, and for each state, we have defined the actions (corresponding to toolbar buttons) and transitions to the next state. This is simple and it works. We can use the useMachine hook to use this machine in a functional component.
 
 ```jsx
 import { toolbarMachine } from '../components/CoaState'
@@ -90,8 +90,8 @@ const comp = () => {
       <Button onClick={() => send('ADD')}    disabled={state.value !== 'view'}>Add</Button>
       <Button onClick={() => send('EDIT')}   disabled={state.value !== 'view'}>Modify</Button>
       <Button onClick={() => send('DELETE')} disabled={state.value !== 'view'}>Delete</Button>
-      <Button onClick={() => send('SELECT')} disabled={!isEditing(state.value)}>OK</Button>
-      <Button onClick={() => send('SELECT')} disabled={!isEditing(state.value)}>Cancel</Button>
+      <Button onClick={() => send('OK')}     disabled={!isEditing(state.value)}>OK</Button>
+      <Button onClick={() => send('CANCEL')} disabled={!isEditing(state.value)}>Cancel</Button>
     </div>)
 };
 
@@ -101,7 +101,7 @@ const isEditing = (value) => {
 
 ```
 
-The state is used to access current state and send method can be used to transition to antoher state. The helper function isEditing just checks if current state is one of add, edit or remove. This looked ok but I wanted to see if it is possible to have a single (parent) state for add/edit/remove to avoid <code>isEditing</code> helper function. Although XState has a concept of hirrarchical states but that just adds a set of states inside a state.
+The state is used to access the current state and the send method can be used to transition to another state. The helper function isEditing just checks if the current state is one of add, edit, or remove. This looked ok but I wanted to see if it is possible to have a single (parent) state for add/edit/remove to avoid <code>isEditing</code> helper function. Although XState has a concept of hierarchical states but that just adds a set of states inside a state.
 
 ##Context to the rescue##
 XState provides an option to extend the state with the context. It can hold any piece of information and can be used as below.
@@ -210,17 +210,22 @@ export const toolbarMachine = Machine(
 
 This will result in a subtle change in the visualizer. ![Vis-3](images/state-vis-3.png "Toolbar State")
 
-This is looking much better now. We have removed code duplication and have also added a clearEditType action to clear the editType from the context. This will also result in getting rid of isEditing helper function and just using state.value to enable/disable Ok and Cancel buttons. Here is the visual representation of this machine.
+This is looking much better now. We have removed code duplication and have also added a clearEditType action to clear the editType from the context. This will also result in getting rid of the isEditing helper function and just using the context to enable/disable Ok and Cancel buttons.
 
-Please note that useMachine hook creates a new machine on each invocation so it should only be used inside your main component and then state can be passed to child component via props.
+```jsx
+<Button onClick={() => send('OK')}     disabled={state.context.editType !== ''}>OK</Button>
+<Button onClick={() => send('CANCEL')} disabled={state.context.editType !== ''}>Cancel</Button>
+```
+
+Please note that the useMachine hook creates a new machine on each invocation so it should only be used inside your main component and then the state can be passed to the child component via props.
 
 ##Benefits##
 
 - All states are well defined and known. Transitions paths are defined so it's not possible to end up in an invalid state.
 - States are well defined and encapsulated inside machine definition. The state machine also captures the state transitions.
-- Testing the state machien is easy. Please see model-based testing in Resources section.
-- Using a state management library not only results in reduced bugs but also promotes better developer experience and eash of maintenance.
-- You can use XState visualizer to visualize as well as test the state transitions. The visualizer has a <code>state</code> tab to check the current state and a <code>event</code> tab to send events. It lists the possible events based on current state and list all the past events for easier playback.
+- Testing the state machine is easy. Please see model-based testing in the Resources section.
+- Using a state management library not only results in reduced bugs but also promotes better developer experience and ease of maintenance.
+- You can use the XState visualizer to visualize as well as test the state transitions. The visualizer has a <code>state</code> tab to check the current state and a <code>event</code> tab to send events. It lists the possible events based on the current state and lists all the past events for easier playback.
 
 ##Where to go from here##
 
@@ -234,6 +239,6 @@ I've covered a very simple example in this post as a starting point. XState has 
 - [Example UI Components wiht XState](https://bradwoods.io/guides/xstate).
 - [Excellent guidelines by Kyle Shevlin](https://kyleshevlin.com/guidelines-for-state-machines-and-xstate#hierarchical-machines).
 - [Model-based testing in React with State Machines](https://css-tricks.com/model-based-testing-in-react-with-state-machines/)
-- One of my all time favourites talk is [Making impossible states impossible](https://www.youtube.com/watch?v=IcgmSRJHu_8) by [Richard Feldman](https://twitter.com/rtfeldman).
+- One of my all-time favorites talk is [Making impossible states impossible](https://www.youtube.com/watch?v=IcgmSRJHu_8) by [Richard Feldman](https://twitter.com/rtfeldman).
 
 <hr/>
